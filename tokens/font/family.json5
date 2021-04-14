@@ -1,0 +1,9 @@
+{
+  font: {
+    family: {
+      sans: {
+        value: "'Helvetica Neue', 'Lucida Grande'",
+      },
+    },
+  },
+}

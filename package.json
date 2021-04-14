@@ -1,0 +1,24 @@
+{
+  "name": "design-token-tailwind-config-creator",
+  "version": "1.0.1",
+  "description": "Creates valid Tailwind config from Style Dictionary design tokens",
+  "author": "Frank Stallone III",
+  "homepage": "https://github.com/frankstallone/design-token-tailwind-config-creator",
+  "main": "dist",
+  "engines": {
+    "node": ">=12.21.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf ./dist",
+    "build": "yarn clean && style-dictionary build",
+    "postbuild": "yarn run format",
+    "format": "prettier './dist/**/*.{js,json,css}' --write"
+  },
+  "devDependencies": {
+    "lodash": "^4.17.21",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "style-dictionary": "^3.0.0-rc.6"
+  }
+}

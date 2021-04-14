@@ -1,0 +1,113 @@
+<%
+
+print(`
+/*
+  * Design Token Tailwind Config Creator
+  * https://github.com/frankstallone/design-token-tailwind-config-creator
+  * Generated on ${new Date().toUTCString()}
+  *
+  */`
+  );
+
+/**
+ * Find all the color names, map through those color names to find
+ * Style Dictionary tokens that match and format them for Tailwind
+ *
+ * @returns {object} Of config template for Tailwind
+ */
+function processColorPalette() {
+  // Grab all color tokens
+  const colorTokens = dictionary.allProperties.filter((token) => token.attributes.category === 'color');
+  if (!colorTokens.length) return;
+
+  // List all unique colors in attributes.type
+  function findListOfColors(tokens) {
+    const flag = {};
+    const unique = [];
+    tokens.forEach(token => {
+      if (!flag[token.attributes.type]) {
+        flag[token.attributes.type] = true;
+        unique.push(token.attributes.type)
+      }
+    })
+    return unique
+  }
+  const uniqueColors = findListOfColors(colorTokens);
+
+  // Returns a specific color token
+  function singleColorTokens(color) {
+    return colorTokens.filter((token) => token.attributes.type === color)
+  }
+
+  // Returns an array of objects with a specific colors tokens
+  function transformTokens(color) {
+    tokensToTransform = singleColorTokens(color);
+    let tokenKeyValues = '';
+    tokensToTransform.forEach((token) => {
+      tokenKeyValues += `\n${token.attributes.item}: '${token.value}',`;
+    })
+    return tokenKeyValues;
+  };
+
+
+  // Map through the color category and store formatted color
+  const transformedTokens = uniqueColors.map((color) => {
+    const value = transformTokens(color);
+    return `\n${color}: {${value}}`
+  });
+
+  print(`colors: {${transformedTokens}},`)
+
+}
+
+/**
+ * Find the one font family we have and format for tailwind.config.js
+ *
+ * @returns [array] like item with font stack
+ */
+
+function processFontFamilyToken() {
+  // Grab the only font family token
+  const fontFamilyToken = dictionary.allProperties.filter((token) => token.attributes.category === 'font' && token.attributes.type === 'family');
+  if (!fontFamilyToken.length) return;
+
+  print(`fontFamily: [${fontFamilyToken[0].value}],`)
+}
+
+/**
+ * General Style Dictionary to Tailwind Config processor
+ *
+ * @returns {object} Of config template for Tailwind
+ */
+
+function processGeneralFontTokens(type) {
+  // Grab the only attributes.type tokens
+  const specificTokens = dictionary.allProperties.filter((token) => token.attributes.category === 'font' && token.attributes.type === type);
+  if (!specificTokens.length) return;
+
+  // Returns an array of objects with a specific attributes.type tokens
+  let tokenKeyValues = '';
+  specificTokens.forEach((token) => {
+    tokenKeyValues += `\n'${token.attributes.item}': '${token.value}',`;
+  })
+
+
+
+  print(`font${type[0].toUpperCase() + type.substring(1)}: {${tokenKeyValues}},`)
+
+}
+
+
+%>
+
+module.exports = {
+  theme: {
+    <% processFontFamilyToken() %>
+    <% processGeneralFontTokens('weight') %>
+    <% processGeneralFontTokens('size') %>
+    <% processColorPalette() %>
+  },
+  corePlugins: {},
+  plugins: [
+  ]
+};
