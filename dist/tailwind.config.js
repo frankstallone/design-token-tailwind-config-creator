@@ -1,7 +1,7 @@
 /*
  * Design Token Tailwind Config Creator
  * https://github.com/frankstallone/design-token-tailwind-config-creator
- * Generated on Wed, 14 Apr 2021 15:06:10 GMT
+ * Generated on Thu, 01 Jul 2021 15:32:09 GMT
  *
  */
 
