@@ -36,7 +36,8 @@ tokens
 
 ## Change log
 
-1.0.3
-• Core colors now distinguished from other colors in project
-• Clearer naming in `tailwind.template`
-• Replaced `.forEach()` with `.map()` functions for unaltered variables
+### 1.0.3
+
+- Core colors now distinguished from other colors in project
+- Clearer naming in `tailwind.template`
+- Replaced `.forEach()` with `.map()` functions for unaltered variables
