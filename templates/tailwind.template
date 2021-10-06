@@ -5,6 +5,7 @@ print(`
   * Design Token Tailwind Config Creator
   * https://github.com/frankstallone/design-token-tailwind-config-creator
   * Generated on ${new Date().toUTCString()}
+  * To be used as a Preset in consumer @ https://tailwindcss.com/docs/presets
   *
   */`
   );
@@ -15,19 +16,19 @@ print(`
  *
  * @returns {object} Of config template for Tailwind
  */
-function processColorPalette() {
+ function processColorPalette() {
   // Grab all color tokens
-  const colorTokens = dictionary.allProperties.filter((token) => token.attributes.category === 'color');
+  const colorTokens = dictionary.allTokens.filter((token) => token.attributes.category === 'color' && token.attributes.type === 'core');
   if (!colorTokens.length) return;
 
-  // List all unique colors in attributes.type
+  // List all unique colors in attributes.item
   function findListOfColors(tokens) {
     const flag = {};
     const unique = [];
     tokens.forEach(token => {
-      if (!flag[token.attributes.type]) {
-        flag[token.attributes.type] = true;
-        unique.push(token.attributes.type)
+      if (!flag[token.attributes.item]) {
+        flag[token.attributes.item] = true;
+        unique.push(token.attributes.item)
       }
     })
     return unique
@@ -36,24 +37,29 @@ function processColorPalette() {
 
   // Returns a specific color token
   function singleColorTokens(color) {
-    return colorTokens.filter((token) => token.attributes.type === color)
+    return colorTokens.filter((token) => token.attributes.item === color)
   }
 
   // Returns an array of objects with a specific colors tokens
   function transformTokens(color) {
     tokensToTransform = singleColorTokens(color);
-    let tokenKeyValues = '';
-    tokensToTransform.forEach((token) => {
-      tokenKeyValues += `\n${token.attributes.item}: '${token.value}',`;
+    const tokenKeyValues = tokensToTransform.map((token) => {
+      if (token.attributes.subitem) {
+        return `\n${token.attributes.subitem}: '${token.value}'`;
+      }
+      return `'${token.value}'`;
     })
     return tokenKeyValues;
   };
 
-
   // Map through the color category and store formatted color
   const transformedTokens = uniqueColors.map((color) => {
     const value = transformTokens(color);
-    return `\n${color}: {${value}}`
+    const token = singleColorTokens(color);
+    if (token[0].attributes.subitem) {
+      return `\n${color}: {${value}}`
+    }
+    return `\n${color}: ${value}`
   });
 
   print(`colors: {${transformedTokens}},`)
@@ -68,7 +74,7 @@ function processColorPalette() {
 
 function processFontFamilyToken() {
   // Grab the only font family token
-  const fontFamilyToken = dictionary.allProperties.filter((token) => token.attributes.category === 'font' && token.attributes.type === 'family');
+  const fontFamilyToken = dictionary.allTokens.filter((token) => token.attributes.category === 'font' && token.attributes.type === 'family');
   if (!fontFamilyToken.length) return;
 
   print(`fontFamily: [${fontFamilyToken[0].value}],`)
@@ -81,17 +87,20 @@ function processFontFamilyToken() {
  */
 
 function processGeneralFontTokens(type) {
-  // Grab the only attributes.type tokens
-  const specificTokens = dictionary.allProperties.filter((token) => token.attributes.category === 'font' && token.attributes.type === type);
+  const specificTokens = dictionary.allTokens.filter(
+    (token) =>
+      // Grab the only matching attributes.type tokens
+      (token.attributes.category === "font" && token.attributes.type === type) ||
+      // Grab the only matching attributes.catagory tokens
+      (token.attributes.type === "font" && token.attributes.category === type)
+  );
+
   if (!specificTokens.length) return;
 
   // Returns an array of objects with a specific attributes.type tokens
-  let tokenKeyValues = '';
-  specificTokens.forEach((token) => {
-    tokenKeyValues += `\n'${token.attributes.item}': '${token.value}',`;
+  const tokenKeyValues = specificTokens.map((token) => {
+    return `\n'${token.attributes.item}': '${token.value}'`;
   })
-
-
 
   print(`font${type[0].toUpperCase() + type.substring(1)}: {${tokenKeyValues}},`)
 

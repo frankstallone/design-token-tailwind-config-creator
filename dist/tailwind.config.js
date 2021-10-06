@@ -1,7 +1,8 @@
 /*
  * Design Token Tailwind Config Creator
  * https://github.com/frankstallone/design-token-tailwind-config-creator
- * Generated on Thu, 01 Jul 2021 15:32:09 GMT
+ * Generated on Wed, 06 Oct 2021 11:12:44 GMT
+ * To be used as a Preset in consumer @ https://tailwindcss.com/docs/presets
  *
  */
 

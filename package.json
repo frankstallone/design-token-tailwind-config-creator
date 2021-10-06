@@ -1,10 +1,11 @@
 {
   "name": "design-token-tailwind-config-creator",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Creates valid Tailwind config from Style Dictionary design tokens",
   "author": "Frank Stallone III",
   "homepage": "https://github.com/frankstallone/design-token-tailwind-config-creator",
   "main": "dist",
+  "license": "MIT License",
   "engines": {
     "node": ">=12.21.0"
   },

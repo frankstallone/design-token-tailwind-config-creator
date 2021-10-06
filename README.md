@@ -33,3 +33,10 @@ tokens
 	└── size.json5
 	└── weight.json5
 ```
+
+## Change log
+
+1.0.3
+• Core colors now distinguished from other colors in project
+• Clearer naming in `tailwind.template`
+• Replaced `.forEach()` with `.map()` functions for unaltered variables

@@ -19,6 +19,8 @@ module.exports = {
         {
           destination: 'tailwind.config.js',
           format: 'tailwind',
+          // Ignore any component tokens
+          filter: (token) => !token.filePath.includes(`tokens/components`),
         },
       ],
     },
